@@ -1,0 +1,43 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity me_ory is
+    Port ( clk:in std_logic;
+address : in  STD_LOGIC_VECTOR (3 downto 0);
+           dataout : out  STD_LOGIC_VECTOR (7 downto 0);
+           re_ad : in  STD_LOGIC);
+end me_ory;
+
+architecture memoryy of me_ory is
+type memory is array(0 to 15) of std_logic_vector (7 downto 0);
+signal RAM : memory := (
+0  => "00001001" , --LDA @9h
+1 =>  "00011010" , --add
+2  => "00111111" , --OUT
+3  => "00001100" , --LDA @9h
+4  => "00101101" , --SUB @Bh
+5  => "00111111" , --OUT
+6  => "11111111" , --HLT
+7  => "00000000" ,
+8  => "00000000" ,
+9  => "00000100" , --4
+10 => "00001001" , --9
+11 => "00000000" , 
+12 => "00000111" , --11
+13 => "00000101" , --5
+14 => "11111111" , 
+15 => "11111111" );
+
+begin
+process (clk)
+begin
+if falling_edge (clk) then
+if re_ad= '1' then
+dataout <= RAM(conv_integer(unsigned(address))); 
+end if;
+end if;
+end process;
+end memoryy;
+

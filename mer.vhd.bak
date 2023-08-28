@@ -1,0 +1,44 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+entity SAP1_Memory is
+    Port ( clk : in STD_LOGIC;
+           address : in STD_LOGIC_VECTOR (3 downto 0);
+           data_out : out STD_LOGIC_VECTOR (7 downto 0);
+           load : in STD_LOGIC);
+end SAP1_Memory;
+
+architecture Behavioral of SAP1_Memory is
+    type memory_array is array (0 to 15) of STD_LOGIC_VECTOR (7 downto 0);
+    signal memory : memory_array := (
+       0  => "00001001" , --LDA @9h
+1 =>  "00011010" , --add
+2  => "00111111" , --OUT
+3  => "00001100" , --LDA @9h
+4  => "00101101" , --SUB @Bh
+5  => "00111111" , --OUT
+6  => "11111111" , --HLT
+7  => "00000000" ,
+8  => "00000000" ,
+9  => "00000100" , --4
+10 => "00001001" , --9
+11 => "00000000" , 
+12 => "00000111" , --11
+13 => "00000101" , --5
+14 => "11111111" , 
+15 => "11111111" );
+   begin
+
+    process(clk)
+    begin
+        if falling_edge(clk) then
+            if load = '1' then
+                data_out <= memory(conv_integer(unsigned(address))); 
+          else
+              data_out <= (others => '0');
+            end if;
+        end if;
+    end process;
+
+end Behavioral;

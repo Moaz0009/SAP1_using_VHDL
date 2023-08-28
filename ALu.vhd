@@ -1,0 +1,28 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+entity ALU is
+  port (clk: in std_logic;
+    A, B: in std_logic_vector(7 downto 0);
+    S_a: in std_logic;
+    aluo: in std_logic;
+    Result: out std_logic_vector(7 downto 0));
+   
+end entity ALU;
+
+architecture Al_u of ALU is
+  signal Temp: std_logic_vector(8 downto 0):=(others =>'0');
+begin
+  process(S_a,A,B,clk)
+  begin
+if rising_edge(clk) then
+      if S_a = '0' then
+     Temp <=('0' & A) + ('0' & B);--('0'&A) to make the number unsigned 
+   else
+     Temp <= ('0' & A) +not ('0' & B) + '1';
+    end if;
+end if;
+  end process;
+Result <= Temp(7 downto 0) when aluo ='1' else (others => 'Z');
+end architecture Al_u;
